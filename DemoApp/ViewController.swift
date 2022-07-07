@@ -19,7 +19,6 @@ class ViewController: UIViewController {
     }
 
     // MARK: - IBOutlets
-
     @IBAction func joinAMeetingButtonPressed(_ sender: Any) {
         presentJoinMeetingAlert()
     }
