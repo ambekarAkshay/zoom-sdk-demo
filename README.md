@@ -142,6 +142,49 @@ To use your custom meeting UI, firstly you need to enable it before you want to 
 Once the custom meeting UI feature is enabled, then starting or joining a meeting is the same as [To join a Meeting](#to-join-a-meeting), [To start a new Meeting](#to-start-a-new-meeting)
 
 ### •	Create Custom Meeting UI
+### Assign Customized UI Meeting Delegate
+   To implement custom meeting UI, firstly, you need to assign MobileRTCCustomizedUIMeetingDelegate to your StartJoinMeetingPresenter(Meeting View)
+   
+      #import "SDKStartJoinMeetingPresenter.h"
+      
+      @interface SDKStartJoinMeetingPresenter (CustomizedUIMeetingDelegate)<MobileRTCCustomizedUIMeetingDelegate>
+      
+      @end
+      
+   Then, in your StartJoinMeetingPresenter.m file, implements the following two functions:
+
+      @implementation SDKStartJoinMeetingPresenter (CustomizedUIMeetingDelegate)
+
+      - (void)onInitMeetingView
+      {
+        // Create & Present View Controller
+        NSLog(@"onInitMeetingView....");
+
+        CustomMeetingViewController *vc = [[CustomMeetingViewController alloc] init];
+        self.customMeetingVC = vc;
+        [vc release];
+
+        [self.rootVC addChildViewController:self.customMeetingVC];
+        [self.rootVC.view addSubview:self.customMeetingVC.view];
+        [self.customMeetingVC didMoveToParentViewController:self.rootVC];
+
+        self.customMeetingVC.view.frame = self.rootVC.view.bounds;
+        ...
+      }
+
+      - (void)onDestroyMeetingView
+      {
+        // Remove & Dismiss View Controller
+        NSLog(@"onDestroyMeetingView....");
+
+        NSLog(@"onDestroyMeetingView....");
+
+        [self.customMeetingVC willMoveToParentViewController:nil];
+        [self.customMeetingVC.view removeFromSuperview];
+        [self.customMeetingVC removeFromParentViewController];
+        self.customMeetingVC = nil;
+        ...
+      }
 
 **Note:** See [UI Legal Notices](https://marketplace.zoom.us/docs/sdk/native-sdks/ui-notices) for Zoom legal notices and how to display them in your app.
 
@@ -151,47 +194,28 @@ Once the custom meeting UI feature is enabled, then starting or joining a meetin
 - A paid Zoom account
 - A Zoom user with a Pro license that will be used as the “Default Host” for telehealth meetings
 - Pro licenses available for each provider that will make telehealth calls
-- The Join Before Host and Waiting Room features can't be locked at the account level
+- The **[Join Before Host](https://support.zoom.us/hc/en-us/articles/202828525)** and **[Waiting Room](https://support.zoom.us/hc/en-us/articles/115000332726)** features can't be locked at the account level
 - Account owner or admin privileges to add and configure, plus contact with your Epic technical representative
 
 
 ## How to add and configure the Epic integration
 
 ### Adding Epic from the Zoom Marketplace
-1. Sign in to the Zoom App Marketplace with your Zoom account.
-2. In the top-right corner, search for Epic and click the app.
-Note: If the app is not pre-approved, contact your Zoom admin to approve this app for your account.
-3. Click Add.
-4. Confirm the permissions the app requires, then click Allow.
+1. Sign in to the **[Zoom App Marketplace](https://marketplace.zoom.us/)** with your Zoom account.
+2. In the top-right corner, search for **Epic** and click the app.
+**Note:** If the app is not pre-approved, contact your Zoom admin to approve this app for your account.
+3. Click **Add**.
+4. Confirm the permissions the app requires, then click **Allow**.
 An admin on your Epic account will need to complete the following steps for configuration.
 
 ### Configure Epic
 **Note:** In order to obtain some of the configuration information, you will need to be in contact with your Epic technical representative for help on building the FDR links and workflow.
 
 1. Sign in to the Zoom App Marketplace with your Zoom developer account.
-2. In the top-right corner, click Manage.
-3. In the navigation menu, click Created Apps.
+2. In the top-right corner, click **Manage**.
+3. In the navigation menu, click **Created Apps**.
 4. Click your developer.zoom.us API (JWT).
-5. Click App credentials.
-6. Copy your API Key and API Secret for use in a later step.
-7. Once you have added the Epic app, configure the following fields:
-   - Default Host User Email: This email address will be the default user that the Zoom meeting will be hosted for. Once the provider joins the meeting, they will become the host.
-   - Provider User Type: The Zoom plan assigned to provider accounts when a user is automatically created as part of joining a telehealth meeting.
-   - Encryption Key: The Zoom API Key. This must be from a paid account and the same Key configured in the Epic system.
-   - Encryption Secret: The Zoom API Secret. This must be from a paid account and the same Secret configured in the Epic system.
-   - Epic Environment: Select Test if will be used with an Epic test environment or select to Production if will be used in a live Epic production environment.
-   - Default Patient Admittance Policy: Select Automatically enter the meeting when the provider joins if the patient should enter the meeting automatically when the provider joins the meeting. Select Be manually admitted to the meeting by the provider if the patient should be admitted into the meeting manually by the provider.
-   - Authorization Type
-     - No Authorization: Select this if no authorization is required for Epic notifications.
-     - Basic Authorization: Select this to use basic authorization for Epic notifications and enter the auth name and password:
-   - Auth Name: The user name of an Epic account that will be used for notification authorization if basic authorization is enabled.
-   - Auth Password: The password of an Epic account that will be used for notification authorization if basic authorization is enabled.
-   - Epic Connection Status Endpoint URL: Enter the URL from the Epic system where the Epic patient/provider join/leave notifications are to be sent to.
-   - Epic Device Test Endpoint URL: Enter the URL from the Epic system where the device test results notifications are to be sent to.
-   - Device Test Help Endpoint URL: Enter the URL where patients should be directed to when they click the help URL while running a device test.
-   - Customize Launch Page: This allows the configuration of the text and image displayed when a patient joins a meeting before the host joins. 
-     - Custom Text: Enter the custom text that will be displayed to participants on the meeting launch page.
-       Note: The text can be a maximum of 256 characters.
-     - Custom Logo: This allows the uploading of a logo that will be displayed on the meeting launch page.
-       Note: The image can only be in a png or jpg file format, a max file size of 2 MB, and a maximum dimension of 800 x 600.
-   - Click Save Changes.
+5. Click **App credentials**.
+6. Copy your **API Key** and **API Secret** for use in a later step.
+7. Once you have added the Epic app, configure the required fields. Refer [here](https://support.zoom.us/hc/en-us/articles/115002222603-Epic-Integration)
+
