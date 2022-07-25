@@ -3,19 +3,38 @@
 <img src="https://camo.githubusercontent.com/f819328f236e10c1a0bb7a157f34c2e141150285adbd38757ffc3af4ec824158/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f757365722d636f6e74656e742e73746f706c696768742e696f2f383938372f31353431303133303633363838" width="400px" max-height="400px" style="margin:auto;"/>
 </div>
 
+## Index
+1. [Zoom SDK integration in your app](#zoom-sdk-integration-in-your-app)
+   - [Prerequisites](#prerequisites)
+   - [SDK integration in your app](#sdk-integration-in-your-app)
+   - [To join a Meeting](#to-join-a-meeting)
+   - [To start a new Meeting](#to-start-a-new-meeting)
+   - [Customized In-Meeting UI](#customized-in-meeting-ui)
+2. [Zoom SDK integration in your **Healthcare app using EPIC**](#zoom-sdk-integration-in-your-healthcare-app-by-using-epic)
+   - [Prerequisites for the Epic integration](#prerequisites-for-the-epic-integration)
+   - [Adding Epic from the Zoom Marketplace](#adding-epic-from-the-zoom-marketplace)
+   - [Configure Epic](#configure-epic)
+---
+
+# **Zoom SDK integration in your app**
+
 ## **Prerequisites**
 
 ### •	Download zoom SDK 
-Login to the  **[Zoom App Marketplace](https://marketplace.zoom.us/)** using your Zoom account, click the Develop option in the dropdown on the top-right corner and select Build App. Next,   click the Create button and provide the required details if you haven't already created an SDK app. If you previously created an SDK app on theMarketplace, click the View here option and navigate to the Download page. Click iOS to download the iOS SDK.
+1. Login to the  **[Zoom App Marketplace](https://marketplace.zoom.us/)** using your Zoom account
+2. Click the **Develop** option in the dropdown on the top-right corner and select **Build App**. 
+3. Next, click the **Create** button and provide the required details if you haven't already created an SDK app. If you previously created an SDK app on theMarketplace, click the **View here** option and navigate to the Download page. Click iOS to download the iOS SDK.
 
 <img width="500px" max-height="500px" alt="68747470733a2f2f73332d75732d776573742d312e616d617a6f6e6177732e636f6d2f73646b2e7a6f6f6d2e75732f6d6b742d30322e706e67" src="https://user-images.githubusercontent.com/108523446/180263815-1d0bcab5-3e6b-4b7a-93c6-7af9d468973b.png">
 
  
-### •	SDK key & Secret 
+### •	SDK key & Secret
 
 After downloading SDK, go to App Credentials [(SDK key & Secret)](https://marketplace.zoom.us/docs/sdk/native-sdks/auth/#get-sdk-key-and-secret) where you will find your SDK Key and Secret.
 
-### •	SDK integration in your app 
+
+## **SDK integration in your app**
+
 Refer [here](https://marketplace.zoom.us/docs/sdk/native-sdks/iOS/build-an-app "Build a Zoom meeting app") to Integrate Zoom SDK in your app
 
  Handles the initialization and authentication of the Zoom SDK in **AppDelegate.swift**
@@ -47,7 +66,7 @@ Refer [here](https://marketplace.zoom.us/docs/sdk/native-sdks/iOS/build-an-app "
     }
 
 
-**To join a Meeting**
+### **To join a Meeting**
 
     /// - Parameters:
     ///   - meetingNumber: The meeting number of the desired meeting.
@@ -79,7 +98,7 @@ Refer [here](https://marketplace.zoom.us/docs/sdk/native-sdks/iOS/build-an-app "
 
 
 
-**To start a new Meeting**
+### **To start a new Meeting**
 
 Zoom meetings and webinars can be started with your [SDK JWT](https://marketplace.zoom.us/docs/sdk/native-sdks/auth/#generate-the-sdk-jwt) and a [User Zoom Access Key (ZAK) token](https://marketplace.zoom.us/docs/sdk/native-sdks/auth/#get-a-users-zak-token).
 
@@ -96,7 +115,7 @@ Zoom meetings and webinars can be started with your [SDK JWT](https://marketplac
 
 
 
-**MobileRTCMeetingService Delegate Methods**
+### **MobileRTCMeetingService Delegate Methods**
 MobileRTCMeetingServiceDelegate listens to updates about meetings, such as meeting state changes, join attempt status, meeting errors, etc.
       
       // Is called upon in-meeting errors, join meeting errors, start meeting errors, meeting connection errors, etc.
@@ -113,3 +132,66 @@ MobileRTCMeetingServiceDelegate listens to updates about meetings, such as meeti
       func onMeetingStateChange(_ state: MobileRTCMeetingState) {
         print("Current meeting state: (state)")
       }
+
+### **Customized In-Meeting UI**
+### •	Enable Custom Meeting UI
+To use your custom meeting UI, firstly you need to enable it before you want to start or join a meeting using the following:
+
+      [[MobileRTC sharedRTC] getMeetingSettings].enableCustomMeeting = YES
+      
+Once the custom meeting UI feature is enabled, then starting or joining a meeting is the same as [To join a Meeting](#to-join-a-meeting), [To start a new Meeting](#to-start-a-new-meeting)
+
+### •	Create Custom Meeting UI
+
+**Note:** See [UI Legal Notices](https://marketplace.zoom.us/docs/sdk/native-sdks/ui-notices) for Zoom legal notices and how to display them in your app.
+
+# **Zoom SDK integration in your Healthcare app by using EPIC**
+
+## Prerequisites for the Epic integration
+- A paid Zoom account
+- A Zoom user with a Pro license that will be used as the “Default Host” for telehealth meetings
+- Pro licenses available for each provider that will make telehealth calls
+- The Join Before Host and Waiting Room features can't be locked at the account level
+- Account owner or admin privileges to add and configure, plus contact with your Epic technical representative
+
+
+## How to add and configure the Epic integration
+
+### Adding Epic from the Zoom Marketplace
+1. Sign in to the Zoom App Marketplace with your Zoom account.
+2. In the top-right corner, search for Epic and click the app.
+Note: If the app is not pre-approved, contact your Zoom admin to approve this app for your account.
+3. Click Add.
+4. Confirm the permissions the app requires, then click Allow.
+An admin on your Epic account will need to complete the following steps for configuration.
+
+### Configure Epic
+**Note:** In order to obtain some of the configuration information, you will need to be in contact with your Epic technical representative for help on building the FDR links and workflow.
+
+1. Sign in to the Zoom App Marketplace with your Zoom developer account.
+2. In the top-right corner, click Manage.
+3. In the navigation menu, click Created Apps.
+4. Click your developer.zoom.us API (JWT).
+5. Click App credentials.
+6. Copy your API Key and API Secret for use in a later step.
+7. Once you have added the Epic app, configure the following fields:
+   - Default Host User Email: This email address will be the default user that the Zoom meeting will be hosted for. Once the provider joins the meeting, they will become the host.
+   - Provider User Type: The Zoom plan assigned to provider accounts when a user is automatically created as part of joining a telehealth meeting.
+   - Encryption Key: The Zoom API Key. This must be from a paid account and the same Key configured in the Epic system.
+   - Encryption Secret: The Zoom API Secret. This must be from a paid account and the same Secret configured in the Epic system.
+   - Epic Environment: Select Test if will be used with an Epic test environment or select to Production if will be used in a live Epic production environment.
+   - Default Patient Admittance Policy: Select Automatically enter the meeting when the provider joins if the patient should enter the meeting automatically when the provider joins the meeting. Select Be manually admitted to the meeting by the provider if the patient should be admitted into the meeting manually by the provider.
+   - Authorization Type
+     - No Authorization: Select this if no authorization is required for Epic notifications.
+     - Basic Authorization: Select this to use basic authorization for Epic notifications and enter the auth name and password:
+   - Auth Name: The user name of an Epic account that will be used for notification authorization if basic authorization is enabled.
+   - Auth Password: The password of an Epic account that will be used for notification authorization if basic authorization is enabled.
+   - Epic Connection Status Endpoint URL: Enter the URL from the Epic system where the Epic patient/provider join/leave notifications are to be sent to.
+   - Epic Device Test Endpoint URL: Enter the URL from the Epic system where the device test results notifications are to be sent to.
+   - Device Test Help Endpoint URL: Enter the URL where patients should be directed to when they click the help URL while running a device test.
+   - Customize Launch Page: This allows the configuration of the text and image displayed when a patient joins a meeting before the host joins. 
+     - Custom Text: Enter the custom text that will be displayed to participants on the meeting launch page.
+       Note: The text can be a maximum of 256 characters.
+     - Custom Logo: This allows the uploading of a logo that will be displayed on the meeting launch page.
+       Note: The image can only be in a png or jpg file format, a max file size of 2 MB, and a maximum dimension of 800 x 600.
+   - Click Save Changes.
